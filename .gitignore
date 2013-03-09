@@ -1,3 +1,7 @@
+# private files
+createdb.sql
+local_settings.py
+
 include
 local
 
