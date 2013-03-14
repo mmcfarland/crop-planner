@@ -7,6 +7,9 @@ local
 
 *.py[cod]
 
+# PyCharm
+.idea/*
+
 # C extensions
 *.so
 
