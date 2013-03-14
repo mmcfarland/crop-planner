@@ -3,7 +3,7 @@ from local_settings import *
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Matt McFarland', 'mmcfarland@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -106,7 +106,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'south'
+    'south',
+    'planner'
 )
 
 # A sample logging configuration. The only tangible logging
