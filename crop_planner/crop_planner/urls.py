@@ -1,12 +1,15 @@
 from django.conf.urls import patterns, include, url
+from django.contrib import admin
+from tastypie.api import Api
 from planner.api import CropResource
 
-crop_resource = CropResource()
-from django.contrib import admin
+api = Api(api_name='v0.1')
+api.register(CropResource())
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^/', include('planner.urls')),
-    url(r'^api/', include(crop_resource.urls))
+    url(r'^api/', include(api.urls))
 )
