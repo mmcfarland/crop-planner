@@ -4,6 +4,7 @@ local_settings.py
 
 include
 local
+share
 
 *.py[cod]
 
