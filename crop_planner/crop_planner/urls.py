@@ -1,12 +1,12 @@
 from django.conf.urls import patterns, include, url
+from planner.api import CropResource
 
+crop_resource = CropResource()
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'crop_planner.views.home', name='home'),
-    # url(r'^crop_planner/', include('crop_planner.foo.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
+    #url(r'^/', include('planner.urls')),
+    url(r'^api/', include(crop_resource.urls))
 )
