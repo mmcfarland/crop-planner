@@ -1,5 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from model_utils.managers import PassThroughManager
+
+class GardenSiteQuerySet(models.query.QuerySet):
+    def scope(self, model):
+        return  model.objects.filter(site=self)
+
 
 class GardenSite(models.Model):
     name = models.CharField(max_length=255)
@@ -7,18 +13,20 @@ class GardenSite(models.Model):
     first_frost = models.DateField()
     last_frost = models.DateField()
 
-    def scope_model(self, model):
-        qs = model.objects.filter(site=self)
-        return qs
-                        
+    query = PassThroughManager.for_queryset_class(GardenSiteQuerySet)()
+
     def __unicode__(self):
         return unicode(self.name)
 
+class SiteUserQuerySet(models.query.QuerySet):
+    def by(self, user):
+        return  self.get(user=user)
 
 class SiteUser(models.Model):
     site = models.ForeignKey(GardenSite, related_name="users")
     user = models.ForeignKey(User)
 
+    query = PassThroughManager.for_queryset_class(SiteUserQuerySet)()
 
     def __unicode__(self):
         return unicode("%s (%s)" % (self.user.username, self.site.name))
@@ -46,6 +54,10 @@ class Variety(models.Model):
     # to 1900 or other generic year
     season_start = models.DateField()
     season_end = models.DateField()
+
+    def __unicode__(self):
+        return unicode("%s - %s" % (self.name, self.crop))
+
 
 class PlantingGuide(models.Model):
     """Specifications for planting scenarios of a variety.
