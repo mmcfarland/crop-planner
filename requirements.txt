@@ -6,3 +6,5 @@ psycopg2==2.4.6
 wsgiref==0.1.2
 ipython
 django-tastypie
+django-registration
+django-model-utils
