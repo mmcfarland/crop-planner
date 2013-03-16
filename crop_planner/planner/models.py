@@ -7,9 +7,22 @@ class GardenSite(models.Model):
     first_frost = models.DateField()
     last_frost = models.DateField()
 
+    def scope_model(self, model):
+        qs = model.objects.filter(site=self)
+        return qs
+                        
+    def __unicode__(self):
+        return unicode(self.name)
+
+
 class SiteUser(models.Model):
     site = models.ForeignKey(GardenSite, related_name="users")
     user = models.ForeignKey(User)
+
+
+    def __unicode__(self):
+        return unicode("%s (%s)" % (self.user.username, self.site.name))
+
 
 class Note(models.Model):
     date = models.DateField(auto_created=True)

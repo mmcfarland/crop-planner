@@ -28,7 +28,7 @@ def auth(req):
 
         if user is not None:
             if user.is_active:
-                pass
+                req.session['garden_site'] =  
             else:
                 pass
         else:

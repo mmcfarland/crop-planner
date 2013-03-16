@@ -27,3 +27,6 @@ class VarietyResource(ModelResource):
         resource_name = 'variety'
         authentication = SessionAuthentication()
 
+    def apply_authorization_limits(self, request, object_list):
+        return object_list.filter(site=request.session.garden_site)
+
