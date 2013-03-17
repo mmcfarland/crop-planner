@@ -22,7 +22,9 @@ class ScopedGardenAuth(Authorization):
         return object_list
 
     def create_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
+        # Everything a user creates will be scoped to their site
+        bundle.obj.site = bundle.request.session['garden_site']
+        return True
 
     def update_list(self, object_list, bundle):
         allowed = []
