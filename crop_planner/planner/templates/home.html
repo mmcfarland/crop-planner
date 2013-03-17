@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% block templates%}
+    <script type="text/template" id="tmpl-variety-list-item">
+        <li>
+            <div><%= name %></div>
+        </li>
+    </script>
+{% endblock templates%}
 
 {% block scripts %}
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -7,8 +14,8 @@
 
     <script type="text/javascript" src="/static/js/components/backbone-tastypie/backbone-tastypie.js"></script>
 
-    <script type="text/javascript" src="/static/js/TemplateLoader.js"></script>
     <script type="text/javascript" src="/static/js/Planner.js"></script>
+    <script type="text/javascript" src="/static/js/TemplateLoader.js"></script>
     <script type="text/javascript" src="/static/js/Planner/Page.js"></script>
     <script type="text/javascript" src="/static/js/Planner/Crop.js"></script>
     <script type="text/javascript" src="/static/js/Planner/Variety.js"></script>
@@ -17,12 +24,11 @@
         $(document).ready(Planner.page.init());
     </script>
 
-    <script type="text/template" id="tmpl-variety-list-item">
-        <div><%= variety.name %></div>
-    </script>
+
 {% endblock scripts %}
 
 {% block content %}
+    Planner for: {{ garden.name }}
     <div id="varieties"></div>
-    {{ garden.name }}
+
 {% endblock %}

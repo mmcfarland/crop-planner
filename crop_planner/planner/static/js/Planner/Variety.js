@@ -17,12 +17,13 @@
         },
 
         render: function() {
-            this.$el.empty();
-            _.invoke(this._subViews, 'remove');
-            this.collection.each(function(variety) {
-                var view = new N.views.VarietyListItemView({model: variety});
-                _subViews.push(view);
-                this.$el.append(view.render().$el);
+            var view = this;
+            view.$el.empty();
+            _.invoke(view._subViews, 'remove');
+            view.collection.each(function(variety) {
+                var subv = new N.views.VarietyListItemView({model: variety});
+                view._subViews.push(subv);
+                view.$el.append(subv.render().$el);
             });
         }
     });
@@ -33,7 +34,7 @@
         },
 
         render: function() {
-            var html = N.page.tmpl["tmpl-variety-list"](this.model);
+            var html = N.page.tmpl["tmpl-variety-list-item"](this.model.toJSON());
             this.$el.html(html);
             return this;
         }
