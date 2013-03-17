@@ -72,11 +72,16 @@ class CropResource(ModelResource):
         authentication = SessionAuthentication()
 
 class VarietyResource(ModelResource):
+    crop = fields.ForeignKey(CropResource, 'crop')
+    site = fields.ForeignKey(GardenResource, 'site')
+
     class Meta:
         queryset = Variety.objects.all()
         resource_name = 'variety'
+        allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
         authorization = ScopedGardenAuth()
+
 
 class PlantingGuideResource(ModelResource):
     variety = fields.ForeignKey(VarietyResource, 'variety')
