@@ -5,7 +5,8 @@
 
     N.collections.Varieties = Backbone.Tastypie.Collection.extend({
         model: N.models.Variety,
-        urlRoot: '/api/v0.1/variety/'
+        urlRoot: '/api/v0.1/variety/',
+        comparator: N.Util.attrComparator('name')
     });
 
     N.views.VarietyListView = Backbone.View.extend({
