@@ -14,7 +14,7 @@ class ScopedGardenAuth(Authorization):
 
     def read_detail(self, object_list, bundle):
         # bundle obj is the resource being requested
-        if bundle.obj.site != bundle.request.session['garden_site']:
+        if not bundle.obj.site == bundle.request.session['garden_site']:
             raise Unauthorized()
         return True
 
