@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import requires_csrf_token
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext, Context, Template
@@ -53,6 +54,7 @@ def auth(req):
     return render_to_response('login.html', {'form':login_form }, RequestContext(req))
 
 @login_required()
+@requires_csrf_token
 def home(req):
     c = {
         'garden': req.session['garden_site']

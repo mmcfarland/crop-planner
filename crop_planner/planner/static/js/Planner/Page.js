@@ -8,6 +8,7 @@
 
         init: function initPage() {
             new N.TemplateLoader().load(N.page.tmpl);
+            this.setupAjax();
 
             Backbone.Tastypie.defaultLimit = 100;
             N.page.collections.crops = new N.collections.Crops();
@@ -37,6 +38,23 @@
                     collection: N.page.collections.guides,
                     el: $('#guides')[0]
                 }).render();
+            });
+        },
+
+        setupAjax: function() {
+            var csrftoken = $.cookie('csrftoken'),
+                csrfSafeMethod = function(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            };
+
+            $.ajaxSetup({
+                crossDomain: false,
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
             });
         }
 
