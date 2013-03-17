@@ -6,7 +6,9 @@
         data: {},
 
         init: function initPage() {
-            Backbone.Tastypie.defaultLimit = 50;
+            Backbone.Tastypie.defaultLimit = 100;
+
+            // TODO: load varieties and render
         }
 
     };
