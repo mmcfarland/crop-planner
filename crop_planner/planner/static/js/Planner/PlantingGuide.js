@@ -1,5 +1,10 @@
 (function (N){
     N.models.PlantingGuide = Backbone.Tastypie.Model.extend({
+        urlRoot: '/api/v0.1/guide/',
+        idAttribute: 'id',
+
+        initialize: function() {
+            // Assume that the variety collection was already loaded,
             // and translate the URI
             var varId = N.Util.pkFromUri('variety', this.get('variety'));
             this.set('variety', N.page.collections.varieties.get(varId));

@@ -1,6 +1,7 @@
 (function (N){
     N.models.Variety = Backbone.Tastypie.Model.extend({
-        urlRoot: '/api/v0.1/variety/'
+        urlRoot: '/api/v0.1/variety/',
+        idAttribute: 'id'
     });
 
     N.collections.Varieties = Backbone.Tastypie.Collection.extend({
