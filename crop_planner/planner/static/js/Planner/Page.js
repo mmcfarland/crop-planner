@@ -10,25 +10,31 @@
             new N.TemplateLoader().load(N.page.tmpl);
 
             Backbone.Tastypie.defaultLimit = 100;
-            this.loadVarieties(N.page.collections.varieties);
-            this.loadGuides(N.page.collections.guides);
+            N.page.collections.crops = new N.collections.Crops();
+            N.page.collections.crops.fetch();
+            this.loadVarieties();
+
         },
 
-        loadVarieties: function(vStore) {
-            vStore = new N.collections.Varieties();
-            vStore.fetch().done(function () {
+        loadVarieties: function() {
+            var page = this;
+            N.page.collections.varieties = new N.collections.Varieties();
+            N.page.collections.varieties.fetch().done(function () {
+                // Guides will reference varieties, so load when done
+                page.loadGuides();
+
                 N.page.views.varietyList = new N.views.VarietyListView({
-                    collection: vStore,
+                    collection: N.page.collections.varieties,
                     el: $('#varieties')[0]
                 }).render();
             });
         },
 
-        loadGuides: function(store) {
-            store = new N.collections.PlantingGuides();
-            store.fetch().done(function () {
+        loadGuides: function() {
+            N.page.collections.guides = new N.collections.PlantingGuides();
+            N.page.collections.guides.fetch().done(function () {
                 N.page.views.guideList = new N.views.PlantingGuideListView({
-                    collection: store,
+                    collection: N.page.collections.guides,
                     el: $('#guides')[0]
                 }).render();
             });
