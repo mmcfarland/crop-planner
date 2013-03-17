@@ -67,11 +67,15 @@ class PlantingGuide(models.Model):
             - How much should I start
             - What schedule should I propagate and plant
     """
+    site = models.ForeignKey(GardenSite)
     variety = models.ForeignKey(Variety)
-    row_spacing = models.DecimalField(max_digits=3, decimal_places=2,
+    row_spacing = models.DecimalField(max_digits=5, decimal_places=2,
         help_text="Inches between rows")
-    plant_spacing = models.DecimalField(max_digits=3, decimal_places=2,
+    plant_spacing = models.DecimalField(max_digits=5, decimal_places=2,
         help_text="Inches between plants of a single row")
+    thin_to_spacing = models.DecimalField(max_digits=5, decimal_places=2,
+        help_text="Inches between plants of a single row, after thinning",
+        null=True, blank=True)
     start_harvesting = models.DateField(help_text="Desired date to begin harvesting")
     end_harvesting = models.DateField(null=True, blank=True,
         help_text="Desired date to continue harvesting until")
@@ -83,6 +87,8 @@ class PlantingGuide(models.Model):
     buffer = models.DecimalField(max_digits=2, decimal_places=2,
         help_text="Percent expected to fail (germination, etc)")
 
+    def __unicode__(self):
+        return unicode("%s %s" % (self.variety , self.pk))
 
 class PlantingGuideNote(Note):
     guide =  models.ForeignKey(PlantingGuide, related_name='notes')
