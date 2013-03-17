@@ -56,6 +56,13 @@ class UserResource(ModelResource):
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter(user=request.user)
 
+class GardenResource(ModelResource):
+    class Meta:
+        queryset = GardenSite.query.all()
+        resource_name = 'garden-site'
+        authentication = SessionAuthentication()
+
+
 class CropResource(ModelResource):
     class Meta:
         queryset = Crop.objects.all()
