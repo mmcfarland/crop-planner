@@ -5,6 +5,12 @@
             <div><%= name %></div>
         </li>
     </script>
+
+<script type="text/template" id="tmpl-guide-list-item">
+    <li>
+        <div><%= variety %></div>
+    </li>
+</script>
 {% endblock templates%}
 
 {% block scripts %}
@@ -20,6 +26,7 @@
     <script type="text/javascript" src="/static/js/Planner/Page.js"></script>
     <script type="text/javascript" src="/static/js/Planner/Crop.js"></script>
     <script type="text/javascript" src="/static/js/Planner/Variety.js"></script>
+    <script type="text/javascript" src="/static/js/Planner/PlantingGuide.js"></script>
 
     <script type="text/javascript">
         $(document).ready(Planner.page.init());
@@ -31,5 +38,6 @@
 {% block content %}
     Planner for: {{ garden.name }}
     <div id="varieties"></div>
+    <div id="guides"></div>
 
 {% endblock %}

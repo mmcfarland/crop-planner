@@ -2,6 +2,7 @@ from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 from tastypie.authentication import SessionAuthentication
 from tastypie.exceptions import Unauthorized
+from tastypie import fields
 
 from planner.models import Crop, GardenSite, SiteUser, Variety, PlantingGuide
 from django.contrib.auth.models import User
@@ -69,6 +70,8 @@ class VarietyResource(ModelResource):
         authorization = ScopedGardenAuth()
 
 class PlantingGuideResource(ModelResource):
+    variety = fields.ForeignKey(VarietyResource, 'variety')
+
     class Meta:
         queryset = PlantingGuide.objects.all()
         resource_name = 'guide'
