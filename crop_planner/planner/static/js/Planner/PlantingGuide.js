@@ -1,6 +1,10 @@
 (function (N){
     N.models.PlantingGuide = Backbone.Tastypie.Model.extend({
-        urlRoot: '/api/v0.1/guide/'
+            // and translate the URI
+            var varId = N.Util.pkFromUri('variety', this.get('variety'));
+            this.set('variety', N.page.collections.varieties.get(varId));
+        }
+
     });
 
     N.collections.PlantingGuides = Backbone.Tastypie.Collection.extend({
@@ -35,7 +39,10 @@
         },
 
         render: function() {
-            var html = N.page.tmpl["tmpl-guide-list-item"](this.model.toJSON());
+            var html = N.page.tmpl["tmpl-guide-list-item"]({
+                variety: this.model.get('variety').toJSON()
+
+            });
             this.$el.html(html);
             return this;
         }
