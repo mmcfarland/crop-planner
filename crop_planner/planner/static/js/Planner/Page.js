@@ -11,4 +11,6 @@
 
     };
 
+    new TemplateLoader().load(N.page.tmpl);
+
 }(Planner));
