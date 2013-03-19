@@ -76,6 +76,7 @@ class PlantingGuide(ScopedGardenModel):
             - How much should I start
             - What schedule should I propagate and plant
     """
+    name = models.CharField(max_length=255)
     variety = models.ForeignKey(Variety)
     row_spacing = models.DecimalField(max_digits=5, decimal_places=2,
         help_text="Inches between rows")
