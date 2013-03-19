@@ -104,3 +104,21 @@ class PlantingGuideNote(Note):
 
 class VarietyNote(Note):
     variety = models.ForeignKey(Variety, related_name='notes')
+
+class IntervalHarvestPlan(ScopedGardenModel):
+    """ Create planting plan by defining a regular harvest schedule
+        like a CSA or weekly market
+    """
+    name = models.CharField(max_length=255)
+    first_week = models.DateField()
+    last_week = models.DateField()
+
+class IntervalHarvest(ScopedGardenModel):
+    plan = models.ForeignKey(IntervalHarvestPlan)
+    week = models.DateField()
+
+class IntervalVariety(ScopedGardenModel):
+    harvest = models.ForeignKey(IntervalHarvest, related_name='varieties')
+    variety = models.ForeignKey(Variety, related_name='+')
+    amount = models.DecimalField(max_digits=8, decimal_places=2,
+        help_text="How much do you hope to harvest?")
