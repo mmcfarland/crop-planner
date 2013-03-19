@@ -18,9 +18,17 @@ class GardenSite(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
+class ScopedGardenModel(models.Model):
+    site = models.ForeignKey(GardenSite, related_name="related_%(class)s")
+
+    class Meta:
+        abstract = True
+
+
 class SiteUserQuerySet(models.query.QuerySet):
     def by(self, user):
         return  self.get(user=user)
+
 
 class SiteUser(models.Model):
     site = models.ForeignKey(GardenSite, related_name="users")
@@ -37,16 +45,17 @@ class Note(models.Model):
     text = models.TextField()
     user = models.ForeignKey(User)
 
+
 class Crop(models.Model):
     name = models.CharField(max_length=255)
 
     def __unicode__(self):
         return self.name
 
-class Variety(models.Model):
+
+class Variety(ScopedGardenModel):
     """A crop instance for a site"""
     crop = models.ForeignKey(Crop)
-    site = models.ForeignKey(GardenSite, related_name="varieties")
     name = models.CharField(max_length=255)
     dtm = models.IntegerField(verbose_name="Days to Maturity")
     direct_seeded = models.BooleanField()
@@ -59,7 +68,7 @@ class Variety(models.Model):
         return unicode("%s - %s" % (self.name, self.crop))
 
 
-class PlantingGuide(models.Model):
+class PlantingGuide(ScopedGardenModel):
     """Specifications for planting scenarios of a variety.
         Able to answer the questions:
             - How much space will be desired amount take
@@ -67,7 +76,6 @@ class PlantingGuide(models.Model):
             - How much should I start
             - What schedule should I propagate and plant
     """
-    site = models.ForeignKey(GardenSite)
     variety = models.ForeignKey(Variety)
     row_spacing = models.DecimalField(max_digits=5, decimal_places=2,
         help_text="Inches between rows")
