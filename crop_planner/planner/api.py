@@ -46,6 +46,15 @@ class ScopedGardenAuth(Authorization):
     def delete_detail(self, object_list, bundle):
         raise Unauthorized("Sorry, no deletes.")
 
+class GardenResource(ModelResource):
+    class Meta:
+        queryset = GardenSite.query.all()
+        resource_name = 'garden-site'
+        authentication = SessionAuthentication()
+
+
+class BaseGardenScopeResource(ModelResource):
+    site = fields.ForeignKey(GardenResource, 'site')
 
 class UserResource(ModelResource):
     class Meta:
@@ -58,12 +67,6 @@ class UserResource(ModelResource):
     def apply_authorization_limits(self, request, object_list):
         return object_list.filter(user=request.user)
 
-class GardenResource(ModelResource):
-    class Meta:
-        queryset = GardenSite.query.all()
-        resource_name = 'garden-site'
-        authentication = SessionAuthentication()
-
 
 class CropResource(ModelResource):
     class Meta:
@@ -71,9 +74,9 @@ class CropResource(ModelResource):
         resource_name = 'crop'
         authentication = SessionAuthentication()
 
-class VarietyResource(ModelResource):
+
+class VarietyResource(BaseGardenScopeResource):
     crop = fields.ForeignKey(CropResource, 'crop')
-    site = fields.ForeignKey(GardenResource, 'site')
 
     class Meta:
         queryset = Variety.objects.all()
@@ -83,7 +86,7 @@ class VarietyResource(ModelResource):
         authorization = ScopedGardenAuth()
 
 
-class PlantingGuideResource(ModelResource):
+class PlantingGuideResource(BaseGardenScopeResource):
     variety = fields.ForeignKey(VarietyResource, 'variety')
 
     class Meta:
