@@ -4,7 +4,9 @@ from tastypie.authentication import SessionAuthentication
 from tastypie.exceptions import Unauthorized
 from tastypie import fields
 
-from planner.models import Crop, GardenSite, SiteUser, Variety, PlantingGuide
+from planner.models import Crop, GardenSite, SiteUser, Variety, PlantingGuide, \
+    IntervalHarvestPlan, IntervalHarvest, IntervalVariety
+
 from django.contrib.auth.models import User
 
 class ScopedGardenAuth(Authorization):
@@ -19,6 +21,7 @@ class ScopedGardenAuth(Authorization):
         return True
 
     def create_list(self, object_list, bundle):
+        print 'cl'
         return object_list
 
     def create_detail(self, object_list, bundle):
@@ -27,6 +30,7 @@ class ScopedGardenAuth(Authorization):
         return True
 
     def update_list(self, object_list, bundle):
+        print 'ul'
         allowed = []
 
         # Since they may not all be saved, iterate over them.
@@ -37,6 +41,7 @@ class ScopedGardenAuth(Authorization):
         return allowed
 
     def update_detail(self, object_list, bundle):
+        print 'ud'
         return bundle.obj.user == bundle.request.user
 
     def delete_list(self, object_list, bundle):
@@ -95,4 +100,33 @@ class PlantingGuideResource(BaseGardenScopeResource):
         authentication = SessionAuthentication()
         authorization = ScopedGardenAuth()
 
+class IntervalHarvestResource(BaseGardenScopeResource):
+    #plan = fields.ForeignKey(IntervalHarvestPlanResource, 'plan')
+    varieties = fields.ToManyField('planner.api.IntervalHarvestVarietyResource',
+        'varieties', full=True)
+    class Meta:
+        queryset = IntervalHarvest.objects.all()
+        resource_name = 'ih'
+        authentication = SessionAuthentication()
+        authorization = ScopedGardenAuth()
 
+class IntervalHarvestPlanResource(BaseGardenScopeResource):
+    harvests = fields.ToManyField('planner.api.IntervalHarvestResource',
+        'intervalharvest_set', full=True)
+
+    class Meta:
+        queryset = IntervalHarvestPlan.objects.all()
+        resource_name = 'ih-plan'
+        authentication = SessionAuthentication()
+        authorization = ScopedGardenAuth()
+
+
+class IntervalHarvestVarietyResource(BaseGardenScopeResource):
+    variety = fields.ForeignKey(VarietyResource, 'variety')
+    harvest = fields.ForeignKey(IntervalHarvestResource, 'harvest')
+
+    class Meta:
+        queryset = IntervalVariety.objects.all()
+        resource_name = 'ih-variety'
+        authentication = SessionAuthentication()
+        authorization = ScopedGardenAuth()
